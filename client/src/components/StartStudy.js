@@ -7,11 +7,9 @@ export default function StartStudy({studyId, studyLength, optionCount = 3}) {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await axios(
-        // more generic url 
-        "http://localhost:5000/api/study/" + studyId + "?question=" + query.question
-      );
-      setData(result.data);
+      axios.get('/api/study/' + studyId + "?question=" + query.question)
+        .then((res) => setData(res.data))
+        .catch((err) => console.log(err));
     }
 
     if (query.question <= studyLength) {

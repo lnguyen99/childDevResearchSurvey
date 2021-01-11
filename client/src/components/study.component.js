@@ -44,14 +44,12 @@ export default class Study extends React.Component {
   onSubmit(e) {
     e.preventDefault(); 
 
-    const participant = {
-      participantId: this.state.participantId, 
-      studyId: this.state.studyId
-    }
-
     // change url to be more generic 
-    axios.post('http://localhost:5000/api/participants/start', participant)
-      .then(res => {
+    axios
+      .post('/api/participants/start', {
+        participantId: this.state.participantId, 
+        studyId: this.state.studyId
+      }).then(res => {
         const study = res.data.study; 
         this.setState({
           studyId: study.id, 
@@ -61,8 +59,7 @@ export default class Study extends React.Component {
           studyLength: study.studyLength, 
           studyConfirmed: true
         });
-      })
-      .catch(function (error) {
+      }).catch(function (error) {
         if (error.response) {
           // Request made and server responded
           console.log(error.response.data);
