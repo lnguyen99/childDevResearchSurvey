@@ -50,7 +50,7 @@ export default class Study extends React.Component {
     }
 
     // change url to be more generic 
-    axios.post('http://localhost:5000/participants/start', participant)
+    axios.post('http://localhost:5000/api/participants/start', participant)
       .then(res => {
         const study = res.data.study; 
         this.setState({

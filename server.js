@@ -3,7 +3,8 @@ const cors = require('cors');
 const bodyParser = require('body-parser'); 
 const mongoose = require('mongoose');
 const path = require('path'); 
-const items = require('./routes/api/items');
+const studyRouter = require('./routes/study');
+const participantsRouter = require('./routes/participants');
 
 require('dotenv').config();
 
@@ -31,14 +32,9 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === "tr
 app.use(cors());
 app.use(express.json());
 
-const studyRouter = require('./routes/study');
-const participantsRouter = require('./routes/participants');
-
-app.use('/study', studyRouter);
-app.use('/participants', participantsRouter);
-
 // Use Routes 
-app.use('/api/items', items); 
+app.use('/api/study', studyRouter);
+app.use('/api/participants', participantsRouter);
 
 // Serve static asset if in production
 if (process.env.NODE_ENV === 'production') {

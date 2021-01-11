@@ -9,7 +9,7 @@ export default function StartStudy({studyId, studyLength, optionCount = 3}) {
     async function fetchData() {
       const result = await axios(
         // more generic url 
-        "http://localhost:5000/study/" + studyId + "?question=" + query.question
+        "http://localhost:5000/api/study/" + studyId + "?question=" + query.question
       );
       setData(result.data);
     }
