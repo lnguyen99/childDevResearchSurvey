@@ -1,17 +1,17 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser'); 
 const mongoose = require('mongoose');
-const path = require("path")
+const path = require('path'); 
+const items = require('./routes/api/items');
 
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
-
-app.use(express.static(path.join(__dirname, "client", "build")))
+// BodyParser Middleware 
+app.use(bodyParser.json()); 
 
 // Mongoose Authentication
 const uri = process.env.ATLAS_URI;
@@ -28,18 +28,25 @@ connection.once('open', () => {
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === "true";
 
-// root route
-app.get("/", (req, res) => {
-  res.json({
-    message: "Welcome to the App!",
-  });
-});
+app.use(cors());
+app.use(express.json());
 
 const studyRouter = require('./routes/study');
 const participantsRouter = require('./routes/participants');
 
 app.use('/study', studyRouter);
 app.use('/participants', participantsRouter);
+
+// Use Routes 
+app.use('/api/items', items); 
+
+// Serve static asset if in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static("client/build")); 
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html')); 
+  }); 
+}
 
 // send 404 if no other route matched
 app.use((req, res) => {
@@ -78,10 +85,6 @@ app.use((err, req, res, next) => {
       errors: err,
     });
   }
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => {
