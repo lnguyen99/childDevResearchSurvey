@@ -44,7 +44,6 @@ export default class Study extends React.Component {
   onSubmit(e) {
     e.preventDefault(); 
 
-    // change url to be more generic 
     axios
       .post('/api/participants/start', {
         participantId: this.state.participantId, 
@@ -110,12 +109,12 @@ export default class Study extends React.Component {
           ) : (
             <div>
               <h3 className="text-center">{this.state.studyName}</h3><br />
-              <h6>Study ID: {this.state.studyId}</h6><br />
-              <h6>Participant ID: {this.state.participantId}</h6><br />
               {this.state.studyStarted ? (
                 <StartStudy studyId={this.state.studyId} studyLength={this.state.studyLength}/>
               ) : (
                 <div>
+                  <h6>Study ID: {this.state.studyId}</h6><br />
+                  <h6>Participant ID: {this.state.participantId}</h6><br />
                   <p><b>Last Submitted:</b> //TODO</p>
                   <p><b>Number of questions:</b> {this.state.studyLength}</p>
                   <p><b>Description:</b> {this.state.studyDescription}</p>

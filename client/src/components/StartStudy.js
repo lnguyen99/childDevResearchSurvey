@@ -1,53 +1,18 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import Question from './Question'; 
+import React, { useState } from 'react';
 
 export default function StartStudy({studyId, studyLength, optionCount = 3}) {
-  const [query, setQuery] = useState({question: 1});
-  const [data, setData] = useState({ question: "", options: [] });
+  const [questionId, setQuestionId] = useState(1);
 
-  useEffect(() => {
-    async function fetchData() {
-      axios.get('/api/study/' + studyId + "?question=" + query.question)
-        .then((res) => setData(res.data))
-        .catch((err) => console.log(err));
-    }
-
-    if (query.question <= studyLength) {
-      fetchData();
-    }
-  }, [query, studyId, studyLength]);
-
-  // onClick = (e) => {
-  //   setQuery({question: query.question + 1});
-  //   //send response to record (participant) 
-  // }; 
+  const nextQuestion = () => {
+    setQuestionId(questionId + 1); 
+  }; 
 
   return (
     <div>
-      {query.question <= studyLength ? (
+      {questionId <= studyLength ? (
         <div> 
-          <h4>Question {data.questionId}: {data.question}</h4>
-          <div className="row">
-            {data.options.map((item) => (
-              item.shownIf <= optionCount ? (
-                <div className="col-md-4" key={item._id}>
-                  <div className="thumbnail">
-                    <a href="#">
-                      <img
-                        src={item.optionImgLink} 
-                        alt={item.optionDesc} 
-                        className="img-thumbnail"
-                        onClick={() => setQuery({question: query.question + 1})}></img>
-                    </a>
-                    <div className="caption text-center">
-                      <p>Option {item.optionId}</p>
-                    </div>
-                    
-                  </div>
-                </div>
-              ) : (<div></div>)           
-            ))}
-          </div>
+          <Question studyId={studyId} questionId={questionId} setQuestionId={nextQuestion} />
           <div className="mt-5 mb-4 float-right">
             <a href="/survey" className="btn btn-outline-secondary btn-sm" 
               role="button" 

@@ -13,6 +13,15 @@ const questionSchema = new Schema({
     type: String, 
     required: true,
   },
+  questionType: {
+    type: String,
+    enum: ['MatchManyOptions', 'MatchChosenOption', 'MatchHappy'],
+    required: true, 
+  },
+  questionImages: [{
+    imgLink: String, 
+    imgDesc: String
+  }],
   options: [{
     optionId: Number, 
     optionImgLink: String, // link to image
