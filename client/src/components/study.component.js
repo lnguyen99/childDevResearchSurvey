@@ -41,6 +41,9 @@ export default class Study extends React.Component {
     })
   }
 
+  // TODO 
+  // randomize number of options shown 
+
   onSubmit(e) {
     e.preventDefault(); 
 
@@ -110,15 +113,15 @@ export default class Study extends React.Component {
             <div>
               <h3 className="text-center">{this.state.studyName}</h3><br />
               {this.state.studyStarted ? (
-                <StartStudy studyId={this.state.studyId} studyLength={this.state.studyLength}/>
+                <StartStudy studyId={this.state.studyId} 
+                  studyLength={this.state.studyLength}
+                  participantId={this.state.participantId}/>
               ) : (
                 <div>
                   <h6>Study ID: {this.state.studyId}</h6><br />
                   <h6>Participant ID: {this.state.participantId}</h6><br />
-                  <p><b>Last Submitted:</b> //TODO</p>
-                  <p><b>Number of questions:</b> {this.state.studyLength}</p>
-                  <p><b>Description:</b> {this.state.studyDescription}</p>
-                  <p><b>Instruction:</b> {this.state.studyInstruction}</p>
+                  <p>{this.state.studyDescription}</p>
+                  <p>{this.state.studyInstruction}</p>
                   <br />
                   <div className="text-center">
                     <button onClick={() => this.setState({studyStarted : true})} 

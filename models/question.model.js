@@ -9,25 +9,26 @@ const questionSchema = new Schema({
     type: Number, 
     required: true, 
   }, 
-  question: {
+  questionPrompt: {
     type: String, 
     required: true,
   },
   questionType: {
     type: String,
-    enum: ['MatchManyOptions', 'MatchChosenOption', 'MatchHappy'],
+    enum: ['DragManyOptions', 'DragChosenOption', 'ChooseHappy', 'ChooseOne'],
     required: true, 
   },
   questionImages: [{
     imgLink: String, 
-    imgDesc: String
+    imgDesc: String,
+    shownIf: Number, // shown if the number of options is equal to this number
+    point: Number, 
   }],
   options: [{
-    optionId: Number, 
-    optionImgLink: String, // link to image
-    optionDesc: String, // description of image, aka alt-text 
-    shownIf: Number, // shown if the number of options is equal to this number
-  }]
+    imgLink: String, // link to image
+    imgDesc: String, // description of image, aka alt-text 
+  }], 
+  counterBalance: Boolean
 });
 
 const Question = mongoose.model('Question', questionSchema);

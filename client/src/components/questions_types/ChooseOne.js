@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function ChooseHappy(props) {
+export default function ChooseOne(props) {
     const { questionPrompt, questionImages, options, onClick } = props; 
     const [imgCount, setImgCount] = useState(0); 
 
@@ -35,30 +35,16 @@ export default function ChooseHappy(props) {
                     <div className="thumbnail" 
                         style={{width: "250px", height: "300px", border: idx === imgCount ? "yellow solid 15px" : ""}}>
                         <img
+                        type="button"
                         src={item.imgLink} 
                         alt={item.imgDesc} 
                         className="rounded mx-auto d-block img-fluid"
                         style={{maxWidth: "100%", maxHeight: "100%"}}
-                        ></img>
-                    </div>
-                </div>)))}
-            </div>
-            <br />
-            <div className="row align-items-center mt-5">
-                {(options?.map((item) => 
-                (<div className="col" key={item._id}>
-                    <div className="thumbnail">
-                        <img
-                        type='button'
-                        src={item.imgLink} 
-                        alt={item.imgDesc} 
-                        className="rounded mx-auto d-block"
-                        style={{"width": "115px"}}
                         onClick={onChoose}
                         ></img>
                     </div>
                 </div>)))}
-            </div>
+            </div>            
         </div>
     ); 
 }

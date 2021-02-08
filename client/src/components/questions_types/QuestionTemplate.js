@@ -1,29 +1,20 @@
-// @flow
-
-import DragChosenOption from './DragChosenOption'; 
 import ChooseHappy from './ChooseHappy'; 
+import ChooseOne from './ChooseOne';
+import DragChosenOption from './DragChosenOption'; 
 import DragManyOptions from './DragManyOptions'; 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 const question_types = {
     DragChosenOption: "DragChosenOption", 
     ChooseHappy: "ChooseHappy", 
     DragManyOptions: "DragManyOptions", 
+    ChooseOne: "ChooseOne"
 }; 
 
 export type QuestionType = $Values<typeof question_types>;
 
 export default function QuestionTemplate(props) {
-    // console.log({props}); 
     const { questionId, questionType } = props; 
-    const [show, setShow] = useState(false); 
-
-    useEffect(() => {
-        setShow(false); 
-        setTimeout(() => setShow(true), 2000); 
-    }, [questionId]); 
-    
-    if (!show) return null; 
     
     switch(questionType) {
         case question_types.DragChosenOption:
@@ -32,6 +23,8 @@ export default function QuestionTemplate(props) {
             return <ChooseHappy {...props} />; 
         case question_types.DragManyOptions:
             return <DragManyOptions {...props}/>; 
+        case question_types.ChooseOne:
+            return <ChooseOne {...props}/>; 
         default:
             return (<div> 
                 <div className="row">

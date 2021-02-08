@@ -13,6 +13,11 @@ export default function Navbar() {
                 <Link to="/" className="navbar-brand">Homepage</Link>
                 <div className="collpase navbar-collapse">
                     <ul className="navbar-nav ml-auto">
+                        {isAuth ? (
+                            <li className="navbar-item">
+                                <Link to="/dashboard" className="nav-link">Dashboard</Link>
+                            </li>
+                        ) : (null)}
                         <li className="navbar-item">
                             <Link to="/about" className="nav-link">About</Link>
                         </li>
@@ -20,10 +25,8 @@ export default function Navbar() {
                             <Link to="/contact-us" className="nav-link">Contact Us</Link>
                         </li>
                         <li className="navbar-item">
-                            {isAuth ? (<LogOut logout={logout} /> ) : 
-                            (<LogIn login={login}>
-                                <div type='button' className="nav-link">Log In</div>
-                            </LogIn>)}
+                            {isAuth ? (<LogOut logout={logout} /> ) : (
+                            <LogIn login={login}><div type='button' className="nav-link">Log In</div></LogIn>)}
                         </li>
                     </ul>
                 </div>

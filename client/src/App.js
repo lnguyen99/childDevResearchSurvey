@@ -17,14 +17,16 @@ function App() {
       <Router>
         <AuthProvider>
           <Navbar /> 
-          <Switch>
-            <ProtectedRoute path="/dashboard" component={Dashboard} />
-            <Route path="/" exact component={Homepage} /> 
-            <Route path="/homepage" component={Homepage} /> 
-            <Route path="/about" component={About}/>
-            <Route path="/contact-us" component={ContactUs}/>
-            <Route path="/survey" component={Study}/>
-          </Switch>
+          <div className="m-3">
+            <Switch>
+              <ProtectedRoute path="/dashboard" component={Dashboard} />
+              <Route path="/" exact component={Homepage} /> 
+              <Route path="/homepage" component={Homepage} /> 
+              <Route path="/about" component={About}/>
+              <Route path="/contact-us" component={ContactUs}/>
+              <Route path="/survey" component={Study}/>
+            </Switch>
+          </div>
         </AuthProvider>
       </Router>
     </div>
