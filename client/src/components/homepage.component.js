@@ -1,9 +1,9 @@
 import React from 'react';
+import LogIn from './LogIn'; 
 
 export default class Homepage extends React.Component {
   constructor(props) {
     super(props); 
-
     this.state = {
     }
   }
@@ -14,8 +14,9 @@ export default class Homepage extends React.Component {
         <h1>I'm a ...</h1>
         <div className="row mt-5">
           <div className="col-md-6">
+            <LogIn>
             <div className="thumbnail">
-              <a href="/log-in">
+              <a href="#">
                 <img 
                   src="https://blog.optimalworkshop.com/wp-content/uploads/2020/03/Qualitative-research-methods.png" 
                   alt="Researcher Cap" 
@@ -25,6 +26,7 @@ export default class Homepage extends React.Component {
                 <h4>Researcher</h4>
               </div>
             </div>
+            </LogIn>
           </div>
           <div className="col-md-6">
             <div className="thumbnail">
