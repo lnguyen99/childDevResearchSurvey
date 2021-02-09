@@ -39,6 +39,7 @@ export default class Study extends React.Component {
     this.setState({
       studyStarted: true,
     })
+    console.log(this.state); 
   }
 
   // TODO 

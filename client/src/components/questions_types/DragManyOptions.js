@@ -1,19 +1,36 @@
 import React, { useEffect, useState } from 'react';
 
 export default function DragManyOptions(props) {
-    const { questionPrompt, questionImages, options, onClick } = props; 
+    const { questionId, questionPrompt, questionImages, options, onClick } = props; 
     const [show, setShow] = useState(false); 
     const [imgCount, setImgCount] = useState(0); 
+    const [response, setResponse] = useState({}); 
     
     const imgLength = options.length; 
+    var startTime = new Date(); 
+
+    const onDrag = (e) => {
+        let time = new Date() - startTime; //millisecond 
+        let qName = `_Q${questionId}_${questionImages[imgCount].imgDesc}`; 
+        // write local response 
+        imgCount < options.length 
+            && setResponse({...response,
+                [`Response${qName}`]: e.target.alt, 
+                [`Time${qName}`]: time
+            });
+
+        setImgCount(imgCount + 1); 
+        startTime = new Date(); 
+    }; 
 
     useEffect(() => {
         setShow(false); 
-        setTimeout(() => setShow(true), 2000); 
+        setTimeout(() => setShow(true), 100); 
 
         function complete() {
             // write response to central 
-            onClick(); // increment to next question
+            onClick(response); // increment to next question
+            console.log({response}); 
         }
 
         if (imgCount >= imgLength) {
@@ -21,10 +38,7 @@ export default function DragManyOptions(props) {
         }
     }, [imgCount, imgLength]); 
 
-    const onDrag = () => {
-        setImgCount(imgCount + 1);
-    }; 
-
+    
     // random location of the bird as well 
 
     // drag drop

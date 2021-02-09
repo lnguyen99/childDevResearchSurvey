@@ -48,7 +48,7 @@ router.route('/:id').post((req, res) => {
         newQuestion.study_id = study._id; 
         
         newQuestion.save()
-          .then((question) => {
+          .then((q) => {
             res.json({
               message: "Question Created!", 
             }); 

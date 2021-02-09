@@ -1,20 +1,30 @@
 import React, { useState, useEffect } from 'react';
 
 export default function ChooseOne(props) {
-    const { questionPrompt, questionImages, options, onClick } = props; 
+    const { questionId, questionPrompt, questionImages, onClick } = props; 
     const [imgCount, setImgCount] = useState(0); 
+    const [response, setResponse] = useState({}); 
 
     const imgLength = questionImages.length;
+    var startTime = new Date(); 
 
-    const onChoose = () => {
-        // write local response 
+    const onChoose = (e) => {
+        let time = new Date() - startTime; //millisecond 
+        let qName = `_Q${questionId}_${questionImages[imgCount].imgDesc}`; 
+
+        setResponse({...response,
+            [`Response${qName}`]: e.target.alt, 
+            [`Time${qName}`]: time
+        }); 
+
         setImgCount(imgCount + 1); 
+        startTime = new Date(); 
     }; 
 
     useEffect(() => {
         function complete() {
-            // write response to central 
-            onClick(); // increment to next question
+            // write response to central + increment to next question
+            onClick(response); 
         }
 
         if (imgCount >= imgLength) {
@@ -23,8 +33,6 @@ export default function ChooseOne(props) {
     }, [imgCount, imgLength]); 
 
     // counterbalance of highlighting  
-
-    // drag drop
 
     return ( 
         <div>

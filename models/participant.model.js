@@ -2,10 +2,11 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const ResponseSchema = new Schema({
-  question: String,
-  response: String, 
-});
+// const ResponseSchema = new Schema({
+//   question: String,
+//   answer: String, 
+//   time: Number // time in milliseconds 
+// });
 
 const participantSchema = new Schema({
   participantId : {
@@ -18,11 +19,16 @@ const participantSchema = new Schema({
     type: Number,
     required: true,
   },
-  responses:[{
-    type: Map,
-    of: ResponseSchema, 
-  }],
+  optionCount: { //number of options shown to participants 
+    type: Number,
+    required: true,
+  },
+  // responses:[{
+  //   type: Map,
+  //   of: ResponseSchema, 
+  // }],
 }, {
+  strict: false, 
   timestamps: true,
 });
 

@@ -3,16 +3,35 @@ import QuestionTemplate from './questions_types/QuestionTemplate';
 
 import axios from "axios";
 
-export default function StartStudy({participantID, studyId, studyLength, optionCount = 3}) {
-  const [questionId, setQuestionId] = useState(5);
+export default function StartStudy({participantId, studyId, studyLength, optionCount = 3}) {
+  const [questionId, setQuestionId] = useState(4);
   const [data, setData] = useState({});
-  const [response, setResponse] = useState({participantID}); 
+  const [body, setBody] = useState({participantId, studyId, optionCount}); 
 
-  console.log(questionId, studyLength); 
-  const nextQuestion = () => {
+  const nextQuestion = (res) => {
     setQuestionId(questionId + 1); 
+    setBody({...body, ...res}); 
   }; 
 
+  async function submitResponse() {
+    axios.post('/api/participants/finish', {body})
+      .then(res => console.log(res))
+      .catch(function (error) {
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+    });   
+  }
+  
   // TODO randomize location of images + counterbalance 
   // by updating the questionImages, options and shownIf at this stage
   // no need to pass optionCount because remove all larger number here (filter)
@@ -40,8 +59,12 @@ export default function StartStudy({participantID, studyId, studyLength, optionC
       }); 
     }
 
-    fetchData(); 
-  }, [studyId, questionId]);
+    if (questionId <= studyLength) {
+      fetchData(); 
+    } else {
+      submitResponse(); 
+    }
+  }, [studyId, questionId, studyLength]);
 
   return (
     <div>

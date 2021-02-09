@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react';
 
 export default function DragChosenOption(props) {
-    const { questionPrompt, questionImages, options, onClick } = props; 
+    const { questionId, questionPrompt, questionImages, options, onClick } = props; 
     const [imgCount, setImgCount] = useState(0); 
-    const imgLength = options.length; 
+    const [response, setResponse] = useState([]); 
 
-    const onDrag = () => {
+    const imgLength = options.length; 
+    var startTime = new Date(); 
+
+    const onDrag = (e) => {
+        let time = new Date() - startTime; //millisecond 
+        let qName = `_Q${questionId}_${options[imgCount].imgDesc}`; 
         // write local response 
-        setImgCount(imgCount + 1);
+        imgCount < options.length 
+            && setResponse({...response,
+                [`Response${qName}`]: e.target.alt, 
+                [`Time${qName}`]: time
+            });
+
+        setImgCount(imgCount + 1); 
+        startTime = new Date(); 
     }; 
 
     useEffect(() => {
         function complete() {
             // write response to central 
-            onClick(); // increment to next question
+            onClick(response); // increment to next question
+            console.log({response}); 
         }
 
         if (imgCount >= imgLength) {
