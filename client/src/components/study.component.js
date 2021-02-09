@@ -7,6 +7,8 @@ export default class Study extends React.Component {
   constructor(props) {
     super(props); 
 
+    this.fetchData = this.fetchData.bind(this); 
+    this.onChangeStudyList = this.onChangeStudyList.bind(this); 
     this.onChangeParticipantId = this.onChangeParticipantId.bind(this); 
     this.onChangeStudyId = this.onChangeStudyId.bind(this); 
     this.onSubmit = this.onSubmit.bind(this); 
@@ -21,7 +23,39 @@ export default class Study extends React.Component {
       studyLength: 0, 
       studyConfirmed: false, 
       studyStarted: false, 
+      studyList: [], 
     }
+  }
+
+  componentDidMount() {
+    this.fetchData(); 
+  }
+
+  async fetchData() {
+    axios.get("/api/study").then(res => this.onChangeStudyList(res.data.studies)
+    ).then(() => console.log(this.state.studyList)
+    ).catch(function (error) {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+    }); 
+  }
+
+  onChangeStudyList(e) {
+    let studyList = []; 
+    e.map(study => studyList.push(`Study ${study.studyId} - ${study.studyName}`))
+    this.setState({
+      studyList
+    }); 
   }
 
   onChangeParticipantId(e) {

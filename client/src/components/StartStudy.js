@@ -4,7 +4,7 @@ import QuestionTemplate from './questions_types/QuestionTemplate';
 import axios from "axios";
 
 export default function StartStudy({participantId, studyId, studyLength, optionCount = 3}) {
-  const [questionId, setQuestionId] = useState(3);
+  const [questionId, setQuestionId] = useState(1);
   const [data, setData] = useState({});
   const [body, setBody] = useState({participantId, studyId, optionCount}); 
 

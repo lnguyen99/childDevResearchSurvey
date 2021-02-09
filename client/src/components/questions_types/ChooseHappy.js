@@ -43,7 +43,7 @@ export default function ChooseHappy(props) {
                 {(questionImages?.map((item, idx) => 
                 (<div className="col-sm mt-3" key={item._id}>
                     <div className="thumbnail" 
-                        style={{width: "250px", height: "300px", border: idx === imgCount ? "yellow solid 15px" : ""}}>
+                        style={{width: "250px", height: "300px", border: idx === imgCount ? "purple solid 15px" : ""}}>
                         <img
                         src={item.imgLink} 
                         alt={item.imgDesc} 
