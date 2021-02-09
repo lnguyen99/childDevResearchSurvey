@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import About from "./components/about.component.js";
 import ContactUs from "./components/contact-us.component";
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/dashboard.component'
 import Homepage from "./components/homepage.component";
 import Navbar from "./components/Navbar"
 import Study from "./components/study.component";

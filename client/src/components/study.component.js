@@ -10,6 +10,7 @@ export default class Study extends React.Component {
     this.onChangeParticipantId = this.onChangeParticipantId.bind(this); 
     this.onChangeStudyId = this.onChangeStudyId.bind(this); 
     this.onSubmit = this.onSubmit.bind(this); 
+    this.onStart = this.onStart.bind(this); 
 
     this.state = {
       participantId: '',
@@ -35,11 +36,10 @@ export default class Study extends React.Component {
     })
   }
 
-  onStart(e) {
+  onStart() {
     this.setState({
       studyStarted: true,
     })
-    console.log(this.state); 
   }
 
   // TODO 
