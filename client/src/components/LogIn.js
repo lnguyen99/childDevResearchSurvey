@@ -12,6 +12,9 @@ export default function LogIn(props) {
     console.log('Login Success: currentUser:', res);
     if (allowedEmails.includes(res.profileObj?.email)) {
       props?.login(); 
+
+      // fix bug doc https://reactrouter.com/web/example/auth-workflow 
+      //https://stackoverflow.com/questions/34119793/react-router-redirection-after-login
       history.push("/dashboard");
     } else {
       alert(`Unauthorized user`);
