@@ -2,6 +2,18 @@ const router = require('express').Router();
 const Study = require('../models/study.model');
 const Question = require('../models/question.model');
 
+// index 
+router.route('/').get((req, res) => {
+  Study.find({})
+    .then(studies => {
+        res.json({
+          studies
+        });
+    }).catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+// add new study 
 router.route('/add').post((req, res) => {
   const newStudy = new Study(req.body);
 
@@ -11,6 +23,8 @@ router.route('/add').post((req, res) => {
     //then update moderators to reflect the new studies 
 });
 
+
+// get info about a study and question of the study 
 router.route('/:id').get((req, res) => {
   Study.findOne({studyId: req.params.id})
     .then(study => {
@@ -37,6 +51,8 @@ router.route('/:id').get((req, res) => {
     }).catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+// create new question for the study 
 router.route('/:id').post((req, res) => {
   Study.findOne({studyId: req.params.id}).exec()
     .then(function(study) {
@@ -59,6 +75,7 @@ router.route('/:id').post((req, res) => {
       }
     }).catch(err => res.status(400).json('Error: ' + err)); 
 });
+
 
 // edit question
 // update question (change prompt, change responses, etc.)
