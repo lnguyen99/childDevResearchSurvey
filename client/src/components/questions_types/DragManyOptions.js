@@ -5,6 +5,7 @@ import Draggable from '../utils/Draggable';
 
 export default function DragManyOptions(props) {
     const { questionId, questionPrompt, questionImages, options, onClick } = props; 
+    shuffle(options); 
 
     const [show, setShow] = useState(false); 
     const [imgCount, setImgCount] = useState(0); 
@@ -15,35 +16,35 @@ export default function DragManyOptions(props) {
     var startTime = new Date(); 
 
     const draggable = ((show && imgCount < options.length) ?
-        <Draggable id={options[imgCount].imgDesc}>
-            <div className="d-flex m-3">
-                <div className="thumbnail" style={{"width": "250px", "height": "200px"}}>
+        <div className=" d-flex mx-auto justify-content-center mt-3">
+            <Draggable id={options[imgCount].imgDesc}>
+                <div className="thumbnail d-flex" style={{"width": "250px", "height": "250px"}}>
                     <img
                     src={options[imgCount].imgLink} 
                     alt={options[imgCount].imgDesc} 
                     className="rounded mx-auto d-block img-fluid"
                     style={{"maxWidth": "100%", "maxHeight": "100%"}}></img>
                 </div>
-            </div>
-        </Draggable> : (null)
+            </Draggable> 
+        </div> : (null)
     );
 
     const dropppables = (
         questionImages?.map((item) => (
-            // We updated the Droppable component so it would accept an `id`
-            // prop and pass it to `useDroppable`
-            <Droppable key={item._id} id={item.imgDesc}>
-                {parent === item.imgDesc ? draggable : (<div className="col-sm mt-3">
-                    <div className="thumbnail" style={{"width": "250px", "height": "300px"}}>
-                        <img
-                        src={item.imgLink} 
-                        alt={item.imgDesc} 
-                        className="rounded mx-auto d-block img-fluid"
-                        style={{"maxWidth": "100%", "maxHeight": "100%"}}
-                        ></img>
-                    </div>
-                </div>)}
-            </Droppable>
+            <div className="col-sm" key={item._id}>
+                <Droppable key={item._id} id={item.imgDesc}>
+                    {parent === item.imgDesc ? draggable : (
+                        <div className="thumbnail d-flex mx-auto" style={{"width": "250px", "height": "300px"}}>
+                            <img
+                            src={item.imgLink} 
+                            alt={item.imgDesc} 
+                            className="mx-auto d-block img-fluid"
+                            style={{"maxWidth": "100%", "maxHeight": "100%"}}
+                            ></img>
+                        </div>
+                    )}
+                </Droppable>
+            </div>
         ))
     ); 
     
@@ -52,6 +53,25 @@ export default function DragManyOptions(props) {
         setParent(over ? over.id : null);
         updateResponse(active?.id, over?.id); 
     }; 
+
+    function shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+      
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+      
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+      
+          // And swap it with the current element.
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+      
+        return array;
+    }      
 
     const updateResponse = (question, answer) => {
         let time = new Date() - startTime; //millisecond 
@@ -82,12 +102,10 @@ export default function DragManyOptions(props) {
         }
     }, [imgCount, imgLength]); 
 
-    // random location of the bird as well 
-
     return (             
         <DndContext onDragEnd={handleDragEnd}>
             <p>{questionPrompt}</p>
-            <div className="row align-items-center">
+            <div className="row align-items-center mx-auto">
                 {dropppables}
             </div>
             {!parent ? draggable : null}

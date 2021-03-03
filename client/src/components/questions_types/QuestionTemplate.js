@@ -14,7 +14,9 @@ const question_types = {
 export type QuestionType = $Values<typeof question_types>;
 
 export default function QuestionTemplate(props) {
-    const { questionId, questionType } = props; 
+    const { questionType } = props; 
+
+    console.log({props}); 
     
     switch(questionType) {
         case question_types.DragChosenOption:

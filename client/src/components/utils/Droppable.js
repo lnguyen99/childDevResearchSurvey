@@ -7,6 +7,14 @@ export default function Droppable(props) {
   });
   const style = {
     opacity: isOver ? 0.5 : 1,
+    // display: 'flex',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // width: 150,
+    // height: 150,
+    // border: '1px solid',
+    // margin: 20,
+    // borderColor: isOver ? '#4c9ffe' : '#EEE',
   };
 
   return (

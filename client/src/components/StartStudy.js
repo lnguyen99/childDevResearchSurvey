@@ -3,10 +3,10 @@ import QuestionTemplate from './questions_types/QuestionTemplate';
 
 import axios from "axios";
 
-export default function StartStudy({participantId, studyId, studyLength, optionCount = 3}) {
+export default function StartStudy({participantId, studyId, studyLength, optionCount, counterBalance}) {
   const [questionId, setQuestionId] = useState(1);
   const [data, setData] = useState({});
-  const [body, setBody] = useState({participantId, studyId, optionCount}); 
+  const [body, setBody] = useState({participantId, studyId, optionCount, counterBalance}); 
 
   const nextQuestion = (res) => {
     setQuestionId(questionId + 1); 
@@ -31,10 +31,6 @@ export default function StartStudy({participantId, studyId, studyLength, optionC
         }
     });   
   }
-  
-  // TODO randomize location of images + counterbalance 
-  // by updating the questionImages, options and shownIf at this stage
-  // no need to pass optionCount because remove all larger number here (filter)
 
   useEffect(() => {    
     async function fetchData() {
@@ -42,8 +38,22 @@ export default function StartStudy({participantId, studyId, studyLength, optionC
         params: {
           question: questionId
         }
-      }).then(res => setData(res.data)
-      ).catch(function (error) {
+      }).then(res => {
+        const obj = res.data; 
+        const questionImages = obj.questionImages?.filter(img => img.shownIf <= optionCount); 
+        // obj.questionType !== "DragChosenOption" 
+        //   ? obj.questionImages?.filter(img => img.shownIf <= optionCount) 
+        //   : obj.questionImages; 
+
+        // true is ASC, false if DESC
+        const order = counterBalance ? 1 : -1; 
+        questionImages.sort((a,b) => 
+          (a.point > b.point) ? order : ((b.point > a.point) ? (-1 * order) : 0)
+        ); 
+        
+        setData({...obj, questionImages}); 
+
+      }).catch(function (error) {
         if (error.response) {
           // Request made and server responded
           console.log(error.response.data);
@@ -69,13 +79,9 @@ export default function StartStudy({participantId, studyId, studyLength, optionC
   return (
     <div>
       {questionId <= studyLength ? (
-        <div> 
-          <div>
             <QuestionTemplate studyId={studyId} 
               onClick={nextQuestion} 
               {...data}/> 
-          </div>
-        </div>
       ) : (
         <div className="text-center mt-5">
           <h3><br/>The survey is finished. Thanks for completing!<br/></h3>

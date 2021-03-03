@@ -76,9 +76,6 @@ export default class Study extends React.Component {
     })
   }
 
-  // TODO 
-  // randomize number of options shown 
-
   onSubmit(e) {
     e.preventDefault(); 
 
@@ -88,12 +85,15 @@ export default class Study extends React.Component {
         studyId: this.state.studyId
       }).then(res => {
         const study = res.data.study; 
+        console.log({study})
         this.setState({
           studyId: study.id, 
           studyName: study.name,
           studyDescription: study.description,
           studyInstruction: study.instruction,
           studyLength: study.studyLength, 
+          optionCount: study.optionCount, 
+          counterBalance: study.counterBalance, 
           studyConfirmed: true
         });
       }).catch(function (error) {
@@ -146,13 +146,15 @@ export default class Study extends React.Component {
             </div>
           ) : (
             <div>
-              <h3 className="text-center">{this.state.studyName}</h3><br />
               {this.state.studyStarted ? (
                 <StartStudy studyId={this.state.studyId} 
                   studyLength={this.state.studyLength}
-                  participantId={this.state.participantId}/>
+                  participantId={this.state.participantId}
+                  optionCount={this.state.optionCount}
+                  counterBalance={this.state.counterBalance} />
               ) : (
                 <div>
+                  <h3 className="text-center">{this.state.studyName}</h3><br />
                   <h6>Study ID: {this.state.studyId}</h6><br />
                   <h6>Participant ID: {this.state.participantId}</h6><br />
                   <p>{this.state.studyDescription}</p>

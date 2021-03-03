@@ -23,7 +23,6 @@ export default function ChooseOne(props) {
 
     useEffect(() => {
         function complete() {
-            // write response to central + increment to next question
             onClick(response); 
         }
 
@@ -32,26 +31,24 @@ export default function ChooseOne(props) {
         }
     }, [imgCount, imgLength]); 
 
-    // counterbalance of highlighting  
-
     return ( 
         <div>
             <p>{questionPrompt}</p>
-            <div className="row align-items-center">
+            <div className="row align-items-center mx-auto">
                 {(questionImages?.map((item, idx) => 
-                (<div className="col-sm mt-3" key={item._id}>
-                    <div className="thumbnail" 
-                        style={{width: "250px", height: "300px", border: idx === imgCount ? "purple solid 15px" : ""}}>
-                        <img
-                        type="button"
-                        src={item.imgLink} 
-                        alt={item.imgDesc} 
-                        className="rounded mx-auto d-block img-fluid"
-                        style={{maxWidth: "100%", maxHeight: "100%"}}
-                        onClick={onChoose}
-                        ></img>
-                    </div>
-                </div>)))}
+                    (<div className="col-sm mx-auto" key={item._id}>
+                        <div className="thumbnail mx-auto" 
+                            style={{width: "250px", height: "300px", border: idx === imgCount ? "purple solid 12px" : ""}}>
+                            <img
+                            type="button"
+                            src={item.imgLink} 
+                            alt={item.imgDesc} 
+                            className="mx-auto d-block img-fluid"
+                            style={{maxWidth: "100%", maxHeight: "100%"}}
+                            onClick={onChoose}
+                            ></img>
+                        </div>
+                    </div>)))}
             </div>            
         </div>
     ); 

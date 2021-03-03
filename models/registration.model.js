@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const Registration = require('./registration.model.js');
 
-const participantSchema = new Schema({
+const registrationSchema = new Schema({
   participantId : {
     type: Number,
     required: true,
@@ -21,13 +20,12 @@ const participantSchema = new Schema({
   counterBalance: { // true is ASC, false if DESC 
     type: Boolean,
     required: true,
-  }, 
-  registration: { type: mongoose.Schema.Types.ObjectId, ref: 'Registration' },
+  }
 }, {
   strict: false, 
   timestamps: true,
 });
 
-const Participant = mongoose.model('Participant', participantSchema);
+const Registration = mongoose.model('Registration', registrationSchema);
 
-module.exports = Participant;
+module.exports = Registration;
