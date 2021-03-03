@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 export default function ChooseOne(props) {
-    const { questionId, questionPrompt, questionImages, onClick } = props; 
+    const { questionId, questionStatement, questionImages, onClick } = props; 
     const [imgCount, setImgCount] = useState(0); 
     const [response, setResponse] = useState({}); 
 
+    const [play, setPlay] = useState(true); 
+
+    const questionAudio = new Audio(questionStatement);
     const imgLength = questionImages.length;
     var startTime = new Date(); 
 
@@ -18,10 +21,21 @@ export default function ChooseOne(props) {
         }); 
 
         setImgCount(imgCount + 1); 
+        if (imgCount < imgLength) {
+            setPlay(true);
+        }
         startTime = new Date(); 
     }; 
 
     useEffect(() => {
+        if (play && imgCount < imgLength) {
+            questionAudio.play()
+            questionAudio.onended = function() {
+                setPlay(false); 
+                startTime = new Date(); 
+            };
+        }
+
         function complete() {
             onClick(response); 
         }
@@ -29,11 +43,10 @@ export default function ChooseOne(props) {
         if (imgCount >= imgLength) {
             complete(); 
         }
-    }, [imgCount, imgLength]); 
+    }, [imgCount, imgLength, play]); 
 
     return ( 
         <div>
-            <p>{questionPrompt}</p>
             <div className="row align-items-center mx-auto">
                 {(questionImages?.map((item, idx) => 
                     (<div className="col-sm mx-auto" key={item._id}>

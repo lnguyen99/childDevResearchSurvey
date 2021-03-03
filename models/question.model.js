@@ -9,7 +9,8 @@ const questionSchema = new Schema({
     type: Number, 
     required: true, 
   }, 
-  questionPrompt: {
+  questionPrompt: String,
+  questionStatement: {
     type: String, 
     required: true,
   },
@@ -28,7 +29,10 @@ const questionSchema = new Schema({
     imgLink: String, // link to image
     imgDesc: String, // description of image, aka alt-text 
   }], 
-  counterBalance: Boolean
+  questionDescription: [{
+    count: Number, // number of options shown
+    audioLink: String, // url to correct count  
+  }], 
 });
 
 const Question = mongoose.model('Question', questionSchema);

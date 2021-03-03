@@ -45,13 +45,19 @@ export default function StartStudy({participantId, studyId, studyLength, optionC
         //   ? obj.questionImages?.filter(img => img.shownIf <= optionCount) 
         //   : obj.questionImages; 
 
+        const correctDescription = obj.questionDescription?.length > 1 ? 
+          obj.questionDescription?.filter(obj => {
+              return obj.count === questionImages.length
+          })[0] : obj.questionDescription[0]; 
+        const descriptionUrl = correctDescription?.audioLink; 
+
         // true is ASC, false if DESC
         const order = counterBalance ? 1 : -1; 
         questionImages.sort((a,b) => 
           (a.point > b.point) ? order : ((b.point > a.point) ? (-1 * order) : 0)
         ); 
         
-        setData({...obj, questionImages}); 
+        setData({...obj, questionImages, descriptionUrl}); 
 
       }).catch(function (error) {
         if (error.response) {
@@ -74,7 +80,7 @@ export default function StartStudy({participantId, studyId, studyLength, optionC
     } else {
       submitResponse(); 
     }
-  }, [studyId, questionId, studyLength]);
+  }, [studyId, questionId, studyLength, optionCount, counterBalance]);
 
   return (
     <div>

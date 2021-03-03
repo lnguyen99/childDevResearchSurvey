@@ -33,7 +33,6 @@ export default class Study extends React.Component {
 
   async fetchData() {
     axios.get("/api/study").then(res => this.onChangeStudyList(res.data.studies)
-    ).then(() => console.log(this.state.studyList)
     ).catch(function (error) {
       if (error.response) {
         // Request made and server responded
@@ -85,7 +84,6 @@ export default class Study extends React.Component {
         studyId: this.state.studyId
       }).then(res => {
         const study = res.data.study; 
-        console.log({study})
         this.setState({
           studyId: study.id, 
           studyName: study.name,

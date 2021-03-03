@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 export default function ChooseHappy(props) {
-    const { questionId, questionPrompt, questionImages, options, onClick } = props; 
+    const { questionId, questionStatement, questionImages, options, onClick } = props; 
     const [imgCount, setImgCount] = useState(0); 
     const [response, setResponse] = useState({}); 
 
+    const [show, setShow] = useState(false); 
+    const [play, setPlay] = useState(true); 
+
+    const questionAudio = new Audio(questionStatement);
     const imgLength = questionImages.length;
     var startTime = new Date(); 
 
@@ -18,10 +22,23 @@ export default function ChooseHappy(props) {
         }); 
 
         setImgCount(imgCount + 1); 
+        setShow(false); 
+        if (imgCount < imgLength) {
+            setPlay(true);
+        }
         startTime = new Date(); 
     }; 
 
     useEffect(() => {
+        if (play && imgCount < imgLength) {
+            questionAudio.play()
+            questionAudio.onended = function() {
+                setPlay(false); 
+                setShow(true); 
+                startTime = new Date(); 
+            };
+        }
+
         function complete() {
             // write response to central + increment to next question
             onClick(response); 
@@ -30,15 +47,12 @@ export default function ChooseHappy(props) {
         if (imgCount >= imgLength) {
             complete(); 
         }
-    }, [imgCount, imgLength]); 
+    }, [imgCount, imgLength, play]); 
 
     // counterbalance of highlighting  
 
-    // drag drop
-
     return ( 
         <div>
-            <p>{questionPrompt}</p>
             <div className="row align-items-center">
                 {(questionImages?.map((item, idx) => 
                 (<div className="col-sm mt-3" key={item._id}>
@@ -54,7 +68,7 @@ export default function ChooseHappy(props) {
                 </div>)))}
             </div>
             <br />
-            <div className="row align-items-center mt-5">
+            {show && <div className="row align-items-center mt-5">
                 {(options?.map((item) => 
                 (<div className="col" key={item._id}>
                     <div className="thumbnail mx-auto">
@@ -68,7 +82,7 @@ export default function ChooseHappy(props) {
                         ></img>
                     </div>
                 </div>)))}
-            </div>
+            </div>}
         </div>
     ); 
 }

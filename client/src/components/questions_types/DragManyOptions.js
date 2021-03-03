@@ -3,20 +3,40 @@ import {DndContext} from '@dnd-kit/core';
 import Droppable from '../utils/Droppable';
 import Draggable from '../utils/Draggable';
 
+import { useMountEffect } from '../utils/useMountEffect'; 
+
 export default function DragManyOptions(props) {
-    const { questionId, questionPrompt, questionImages, options, onClick } = props; 
+    const { 
+        questionId, 
+        descriptionUrl, 
+        questionStatement, 
+        questionImages, 
+        options, 
+        onClick 
+    } = props; 
     shuffle(options); 
 
     const [show, setShow] = useState(false); 
+    const [play, setPlay] = useState(false); 
     const [imgCount, setImgCount] = useState(0); 
     const [response, setResponse] = useState({}); 
     const [parent, setParent] = useState(null);
     
     const imgLength = options.length; 
     var startTime = new Date(); 
+      
+    const descriptionAudio = new Audio(descriptionUrl);
+    const questionAudio = new Audio(questionStatement);
+
+    useMountEffect(() => {
+        descriptionAudio.play()
+        descriptionAudio.onended = function() {
+            setPlay(true); 
+        };
+    })
 
     const draggable = ((show && imgCount < options.length) ?
-        <div className=" d-flex mx-auto justify-content-center mt-3">
+        <div className=" d-flex mx-auto justify-content-center mt-5">
             <Draggable id={options[imgCount].imgDesc}>
                 <div className="thumbnail d-flex" style={{"width": "250px", "height": "250px"}}>
                     <img
@@ -84,13 +104,21 @@ export default function DragManyOptions(props) {
             });
 
         setImgCount(imgCount + 1); 
+        setPlay(true);
+        setShow(false); 
         setParent(null); 
         startTime = new Date(); 
     }; 
 
     useEffect(() => {
-        setShow(false); 
-        setTimeout(() => setShow(true), 100); 
+        if (play && imgCount < options.length) {
+            questionAudio.play()
+            questionAudio.onended = function() {
+                setPlay(false); 
+                setShow(true); 
+                startTime = new Date(); 
+            };
+        }
 
         function complete() {
             // write response to central 
@@ -100,11 +128,10 @@ export default function DragManyOptions(props) {
         if (imgCount >= imgLength) {
             complete(); 
         }
-    }, [imgCount, imgLength]); 
+    }, [imgCount, imgLength, play]); 
 
     return (             
         <DndContext onDragEnd={handleDragEnd}>
-            <p>{questionPrompt}</p>
             <div className="row align-items-center mx-auto">
                 {dropppables}
             </div>

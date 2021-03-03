@@ -3,14 +3,34 @@ import React, { useState, useEffect } from 'react';
 // import Droppable from '../utils/Droppable';
 // import Draggable from '../utils/Draggable';
 
+import { useMountEffect } from '../utils/useMountEffect'; 
+
 export default function DragChosenOption(props) {
-    const { questionId, questionPrompt, questionImages, options, onClick } = props; 
+    const { 
+        questionId, 
+        descriptionUrl, 
+        questionStatement, 
+        questionImages, 
+        options, 
+        onClick 
+    } = props; 
+    const [show, setShow] = useState(false); 
+    const [play, setPlay] = useState(false); 
     const [imgCount, setImgCount] = useState(0); 
     const [response, setResponse] = useState([]); 
     // const [parent, setParent] = useState(null);
 
-    const imgLength = options.length; 
     var startTime = new Date(); 
+      
+    const descriptionAudio = new Audio(descriptionUrl);
+    const questionAudio = new Audio(questionStatement);
+
+    useMountEffect(() => {
+        descriptionAudio.play()
+        descriptionAudio.onended = function() {
+            setPlay(true); 
+        };
+    })
 
     // function handleDragEnd(event) {
     //     const {over, active} = event; 
@@ -31,6 +51,8 @@ export default function DragChosenOption(props) {
 
     //     setImgCount(imgCount + 1); 
     //     setParent(null); 
+    //     setShow(false); 
+    //     setPlay(true);
     //     startTime = new Date(); 
     // }; 
 
@@ -38,31 +60,42 @@ export default function DragChosenOption(props) {
         let time = new Date() - startTime; //millisecond 
         let qName = `_Q${questionId}_${options[imgCount].imgDesc}`; 
         // write local response 
-        imgCount < options.length 
+        imgCount < questionImages.length 
             && setResponse({...response,
                 [`Response${qName}`]: e.target.alt, 
                 [`Time${qName}`]: time
             });
 
         setImgCount(imgCount + 1); 
+        setShow(false); 
+        if (imgCount < questionImages.length) {
+            setPlay(true);
+        }
         startTime = new Date(); 
     }; 
 
     useEffect(() => {
+        if (play && imgCount < questionImages.length) {
+            questionAudio.play()
+            questionAudio.onended = function() {
+                setPlay(false); 
+                setShow(true); 
+                startTime = new Date(); 
+            };
+        }
+
         function complete() {
             // write response to central 
             onClick(response); // increment to next question
-            console.log({response}); 
         }
 
-        if (imgCount >= imgLength) {
+        if (imgCount >= questionImages.length) {
             complete(); 
         }
-    }, [imgCount, imgLength]); 
+    }, [imgCount, play]); 
 
     return ( 
         <div>
-            <p>{questionPrompt}</p>
             <div className="row align-items-center">
                 {(questionImages?.map((item, idx) => 
                 (<div className="col-sm mx-auto" key={item._id}>
@@ -79,7 +112,7 @@ export default function DragChosenOption(props) {
             </div>
             <br />
             <div className="row align-items-center mt-2">
-                {(options?.map((item) => 
+                {show && (options?.map((item) => 
                 (<div className="col-md-4 d-flex mx-auto" key={item._id} type="button">
                     <div className="thumbnail d-flex mx-auto" style={{width: "300px", height : "150px"}}>
                         <img
