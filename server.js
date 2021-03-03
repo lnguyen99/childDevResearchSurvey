@@ -6,8 +6,6 @@ const path = require('path');
 const studyRouter = require('./routes/study');
 const participantsRouter = require('./routes/participants');
 
-require('dotenv').config();
-
 const app = express();
 const port = process.env.PORT || 5000;
 
